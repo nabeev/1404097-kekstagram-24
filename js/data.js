@@ -42,9 +42,8 @@ const createComment = () => {
     return CommentId;
   };
   //функция генерации аватара
-  const createAvatar = () => {
-    return 'img/avatar-' + getRandomNumberFromRange(1,6) + '.svg';
-  };
+  const createAvatar = () => `img/avatar-${getRandomNumberFromRange(1,6)}.svg`;
+
   //функция генерации сообщения из не более двух занных
   const createMessage = () => {
     //определяем сколько исходных сообщений будем использовать
@@ -53,7 +52,7 @@ const createComment = () => {
     let createdMessage = MESSAGES[getRandomNumberFromRange(0, MESSAGES.length-1)];
     //рандомное второе сообщение, если нужно
     if (lengthOfMessage > 1) {
-      createdMessage += ' ' + MESSAGES[getRandomNumberFromRange(0, MESSAGES.length-1)];
+      createdMessage += ` ${MESSAGES[getRandomNumberFromRange(0, MESSAGES.length-1)]}`;
     }
     return createdMessage;
   };
@@ -67,9 +66,7 @@ const createComment = () => {
 };
 
 //Функция, создающая массив комментариев, указанной длины
-const createCommentArray = (commentQnty) => {
-  return Array.from({length: commentQnty}, createComment);
-};
+const createCommentArray = (commentQnty) => Array.from({length: commentQnty}, createComment);
 
 //Максимальная длина описания
 const MAX_LENGTH_OF_DESCRIPTION = 30;
@@ -84,7 +81,7 @@ let idsCounter = 0;
 //Задаём массив адресов картинок
 const urls = [];
 for (let i = 0; i < 25; i++) {
-  urls[i] = 'photos/' + (i + 1) + '.jpg';
+  urls[i] = `photos/${i + 1}.jpg`;
 }
 let urlsCounter = 0;
 
