@@ -126,6 +126,3 @@ const createPhotoDescription = () => {
 };
 
 export {createPhotoDescription};
-
-//const resultArray = Array.from({length: 25}, createPhotoDescription);
-//console.log(resultArray);
