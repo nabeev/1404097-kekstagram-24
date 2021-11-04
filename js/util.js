@@ -12,5 +12,7 @@ const checkLengthOfString = (checkingString, maxLength) => checkingString.length
 //источник определения длины строки
 //https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/String/length
 
+//Проверка клавиши Esc
+const isEscapeKey = (evt) => evt.key === 'Escape';
 
-export {getRandomNumberFromRange, checkLengthOfString};
+export {getRandomNumberFromRange, checkLengthOfString, isEscapeKey};
