@@ -24,3 +24,5 @@ picturesList.forEach( ({url, likes, comments}) => {
 
 //Отрисовка на странице
 pictures.appendChild(picturesFragment);
+
+export {picturesList};
