@@ -1,4 +1,5 @@
 import {getRandomNumberFromRange} from './util.js';
+import {MAX_PHOTO_COMMENTS} from './const.js';
 //ГЕНЕРАЦИЯ ДАННЫХ: МАССИВ ОБЪЕКТОВ - ОПИСАНИЙ ФОТОГРАФИЙ
 
 //Создание вложенного в описание фотографии массива объектов комментариев
@@ -23,7 +24,7 @@ const MESSAGES = [
 ];
 
 //Максимальное значение id комментария
-const MAX_COMMENT_ID = 100;
+const MAX_COMMENT_ID = 1000;
 //Использованные id в комментариях
 const usedCommentIds = [];
 
@@ -121,7 +122,7 @@ const createPhotoDescription = () => {
     url: gentRandomArrayElementFrom(urls, urlsCounter, false),
     description: getRandomString(MAX_LENGTH_OF_DESCRIPTION),
     likes: getRandomNumberFromRange(15, 200),
-    comments: createCommentArray(getRandomNumberFromRange(1,3)),
+    comments: createCommentArray(getRandomNumberFromRange(1,MAX_PHOTO_COMMENTS)),
   };
 };
 

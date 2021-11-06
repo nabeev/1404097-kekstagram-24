@@ -1,8 +1,9 @@
 //Импортируем функцию генерации данных
 import {createPhotoDescription} from './data.js';
+import {THUMBNAIL_QTY} from './const.js';
 
 //Генерируем данные
-const picturesList = Array.from({length: 12}, createPhotoDescription);
+const picturesList = Array.from({length: THUMBNAIL_QTY}, createPhotoDescription);
 //Находим место вставки данных
 const pictures = document.querySelector('.pictures');
 //Находим шаблон фото
