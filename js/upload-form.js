@@ -1,6 +1,8 @@
 //Отрисовка формы
 import {isEscapeKey} from './util.js';
 import {makeCommentValidMessage, makeHashtagValidMessage} from './form-validation.js';
+import {increaseScale, decreaseScale} from './preview-scale.js';
+import {makeImageEffect} from './effects.js';
 
 //Находим форму
 const uploadForm = document.querySelector('.img-upload__form');
@@ -17,6 +19,18 @@ const closeButton = uploadForm.querySelector('.img-upload__cancel');
 //Находим поля хэштегов и описания
 const uploadHashtag = uploadForm.querySelector('.text__hashtags');
 const uploadDescription = uploadForm.querySelector('.text__description');
+
+//Находим предварительный просмотр фотографии и инпут со значением масштаба
+const imgPreview = uploadForm.querySelector('.img-upload__preview').firstElementChild;
+const scaleControlValue = uploadForm.querySelector('.scale__control--value');
+//Находим кнопки изменения масштаба
+const scaleControlSmaller = uploadForm.querySelector('.scale__control--smaller');
+const scaleControlBigger = uploadForm.querySelector('.scale__control--bigger');
+
+//Найдем слайдер
+const effectSlider = uploadForm.querySelector('.effect-level__slider');
+//Найдем радиокнопки выбора эффекта
+const effectsRadio = uploadForm.querySelectorAll('.effects__radio');
 
 //Закрытие окна редактирования нового изображения по нажатию Esc
 const onUploadFormEscKeydown = (evt) => {
@@ -36,16 +50,26 @@ function closeCloseUploadForm () {
   imgUploadForm.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
   document.removeEventListener('keydown', onUploadFormEscKeydown);
+
+  //Убираем обработчики масштаба
+  scaleControlBigger.removeEventListener('click', increaseScale);
+  scaleControlSmaller.removeEventListener('click', decreaseScale);
+  //Убираем обработчики эффектов
+  effectsRadio.forEach( (element) => {
+    element.removeEventListener('change', makeImageEffect);
+  });
 }
 
 //Показ окна редактирования нового изображения по добавлению изображния
 uploadImg.addEventListener('change', () => {
+  //показываем форму
   imgUploadForm.classList.remove('hidden');
   document.querySelector('body').classList.add('modal-open');
-
+  //Обработчики закрытия формы
   closeButton.addEventListener('click', closeCloseUploadForm);
   document.addEventListener('keydown', onUploadFormEscKeydown);
 
+  //Проверка хэштегов по инпуту
   uploadHashtag.addEventListener('focus', () => {
     //Блокируем закрытие формы по Esc, если поле хэштег в фокусе
     document.removeEventListener('keydown', onUploadFormEscKeydown);
@@ -55,7 +79,7 @@ uploadImg.addEventListener('change', () => {
       uploadHashtag.reportValidity();
     });
   });
-
+  //Проверка комментария по инпуту
   uploadDescription.addEventListener('focus', () => {
     //Блокируем закрытие формы по Esc, если поле коммент в фокусе
     document.removeEventListener('keydown', onUploadFormEscKeydown);
@@ -72,13 +96,34 @@ uploadImg.addEventListener('change', () => {
   uploadDescription.addEventListener('blur', () => {
     document.addEventListener('keydown', onUploadFormEscKeydown);
   });
+
+  //Масштаб изображения
+  //Масштаб по умолчанию 100%
+  imgPreview.style.transform = 'scale(1)';
+  scaleControlValue.value = '100%';
+  //Увеличение масштаба (макс = 100%)
+  scaleControlBigger.addEventListener('click', increaseScale);
+  //Уменьшение масштаба (мин = 25%)
+  scaleControlSmaller.addEventListener('click', decreaseScale);
+
+  //Эффекты изображения
+  //Эффекты по умолчанию отсутствуют
+  imgPreview.classList = '';
+  imgPreview.style.filter = '';
+  if (effectSlider.noUiSlider) {
+    effectSlider.noUiSlider.destroy();
+  }
+  //Управление эффектами для изображения
+  effectsRadio.forEach( (element) => {
+    element.addEventListener('change', makeImageEffect);
+  });
 });
 
 uploadForm.addEventListener('submit', (evt) => {
-  if (!(makeCommentValidMessage(uploadDescription.value) === '')) {
+  if (!(makeHashtagValidMessage(uploadHashtag.value) === '')) {
     evt.preventDefault();
-    uploadDescription.setCustomValidity(makeCommentValidMessage(uploadDescription.value));
-    uploadDescription.reportValidity();
+    uploadHashtag.setCustomValidity(makeHashtagValidMessage(uploadHashtag.value));
+    uploadHashtag.reportValidity();
   }
   if (!(makeCommentValidMessage(uploadDescription.value) === '')) {
     evt.preventDefault();
