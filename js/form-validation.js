@@ -11,19 +11,19 @@ const makeHashtagValidMessage = (hashtag) => {
   let validMessage ='';
 
   //Проверяем полученный массив на условия
-  if ((hashtags[hashtags.length-1] === '')) {
-    if (isDubbleInArrayFree(hashtags)) {
-      validMessage = 'Такой хэштег уже есть!';
-    }
-    else if (hashtags.length > 5) {
-      validMessage = 'Не более пяти хэштегов!';
-    }
-  } else {
+
+  if (isDubbleInArrayFree(hashtags)) {
+    validMessage = 'Такой хэштег уже есть!';
+  }
+  else if (hashtags.length > 5) {
+    validMessage = 'Не более пяти хэштегов!';
+  }
+  else {
     for (let i = 0; i < hashtags.length; i++) {
       if (hashtags[i] === '#') {
         validMessage = 'Хэштег не может состоять из одной решетки!';
       }
-      else if (!reHashtag.test(hashtags[i])) {
+      else if (!reHashtag.test(hashtags[i]) && hashtags[i] !== '') {
         validMessage = 'Введен недопустимый символ!';
       }
       else {
@@ -31,6 +31,7 @@ const makeHashtagValidMessage = (hashtag) => {
       }
     }
   }
+
   return validMessage;
 };
 
