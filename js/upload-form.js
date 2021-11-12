@@ -3,6 +3,7 @@ import {isEscapeKey} from './util.js';
 import {makeCommentValidMessage, makeHashtagValidMessage} from './form-validation.js';
 import {increaseScale, decreaseScale} from './preview-scale.js';
 import {makeImageEffect} from './effects.js';
+import {sendData} from './api.js';
 
 //Находим форму
 const uploadForm = document.querySelector('.img-upload__form');
@@ -36,16 +37,20 @@ const effectsRadio = uploadForm.querySelectorAll('.effects__radio');
 const onUploadFormEscKeydown = (evt) => {
   if (isEscapeKey(evt)) {
     evt.preventDefault();
-    closeCloseUploadForm();
+    closeUploadForm();
   }
 };
 
 //Функция закрытия окна редактирования нового изображения
-function closeCloseUploadForm () {
+function closeUploadForm () {
   //Сбрасывание значений полей
   uploadImg.value = '';
   uploadHashtag.value = '';
   uploadDescription.value = '';
+  imgPreview.style.transform = 'scale(1)';
+  scaleControlValue.value = '100%';
+  imgPreview.classList = '';
+  imgPreview.style.filter = '';
 
   imgUploadForm.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
@@ -66,7 +71,7 @@ uploadImg.addEventListener('change', () => {
   imgUploadForm.classList.remove('hidden');
   document.querySelector('body').classList.add('modal-open');
   //Обработчики закрытия формы
-  closeButton.addEventListener('click', closeCloseUploadForm);
+  closeButton.addEventListener('click', closeUploadForm);
   document.addEventListener('keydown', onUploadFormEscKeydown);
 
   //Проверка хэштегов по инпуту
@@ -118,16 +123,27 @@ uploadImg.addEventListener('change', () => {
     element.addEventListener('change', makeImageEffect);
   });
 });
+//Отправка данных формы
+const setUploadFormSubmit = (onSuccess) => {
+  uploadForm.addEventListener('submit', (evt) => {
+    evt.preventDefault();
+    if (!(makeHashtagValidMessage(uploadHashtag.value) === '')) {
+      uploadHashtag.setCustomValidity(makeHashtagValidMessage(uploadHashtag.value));
+      uploadHashtag.reportValidity();
+    } else if (!(makeCommentValidMessage(uploadDescription.value) === '')) {
+      evt.preventDefault();
+      uploadDescription.setCustomValidity(makeCommentValidMessage(uploadDescription.value));
+      uploadDescription.reportValidity();
+    } else {
 
-uploadForm.addEventListener('submit', (evt) => {
-  if (!(makeHashtagValidMessage(uploadHashtag.value) === '')) {
-    evt.preventDefault();
-    uploadHashtag.setCustomValidity(makeHashtagValidMessage(uploadHashtag.value));
-    uploadHashtag.reportValidity();
-  }
-  if (!(makeCommentValidMessage(uploadDescription.value) === '')) {
-    evt.preventDefault();
-    uploadDescription.setCustomValidity(makeCommentValidMessage(uploadDescription.value));
-    uploadDescription.reportValidity();
-  }
-});
+      sendData(
+        () => onSuccess(),
+        () => closeUploadForm(),
+        new FormData(evt.target),
+      );
+
+    }
+  });
+};
+
+export {setUploadFormSubmit, closeUploadForm};
