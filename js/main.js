@@ -1,10 +1,16 @@
-import {renderBigPicture} from './gallery.js';
 import {setUploadFormSubmit, closeUploadForm} from './upload-form.js';
 import {getData} from './api.js';
-import {THUMBNAIL_QTY} from './const.js';
+import {renderGallery} from './gallery.js';
+import {debounce} from './debounce.js';
+import {RERENDER_DELAY} from './const.js';
+import {getFilteredPictures, setFilterClick} from './filter.js';
 
 setUploadFormSubmit(closeUploadForm);
 
 getData((pictures) => {
-  renderBigPicture(pictures.slice(0, THUMBNAIL_QTY));
+  renderGallery(pictures);
+  setFilterClick(debounce(
+    () => renderGallery(getFilteredPictures(pictures)),
+    RERENDER_DELAY,
+  ));
 });

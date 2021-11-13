@@ -1,7 +1,9 @@
 //Модуль описания констант
-//Количество миниатюр на странице
-const THUMBNAIL_QTY = 12;
+//Задержка отрисовки
+const RERENDER_DELAY = 500;
 //По сколько грузим комментариев в большой фотографии
 const COMMENT_LOAD_QTY = 5;
+//Допустимые типы файлов
+const FILE_TYPES = ['gif', 'jpg', 'jpeg', 'png'];
 
-export {THUMBNAIL_QTY, COMMENT_LOAD_QTY};
+export {RERENDER_DELAY, COMMENT_LOAD_QTY, FILE_TYPES};

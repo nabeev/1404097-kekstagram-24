@@ -1,5 +1,15 @@
 const ALERT_SHOW_TIME = 5000;
 
+const getRandomNumberFromRange = (begin, end) => {
+  if (begin < 0 || end < 0 || begin > end) {
+    return NaN;
+  }
+
+  return Math.floor(Math.random() * (end - begin + 1)) + begin;
+  //источник функции
+  //https://developer.mozilla.org/ru/docs/Web/JavaScript/Reference/Global_Objects/Math/random
+};
+
 //Проверка клавиши Esc
 const isEscapeKey = (evt) => evt.key === 'Escape';
 
@@ -54,4 +64,4 @@ const showAlert = (message) => {
   }, ALERT_SHOW_TIME);
 };
 
-export {isEscapeKey, isDubbleInArrayFree, showAlert};
+export {getRandomNumberFromRange, isEscapeKey, isDubbleInArrayFree, showAlert};

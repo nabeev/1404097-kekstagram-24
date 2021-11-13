@@ -1,15 +1,14 @@
 //Модуль отрисовки миниатюр на странице
-
-const renderThumbnail = (picturesList) => {
+const renderThumbnail = (pictures) => {
   //Находим место вставки данных
-  const pictures = document.querySelector('.pictures');
+  const picturesContainer = document.querySelector('.pictures');
   //Находим шаблон фото
   const pictuteTemplate = document.querySelector('#picture').content.querySelector('.picture');
   //Создаем фрагмент данных
   const picturesFragment = document.createDocumentFragment();
 
   //Проходим все элементы массива данных
-  picturesList.forEach( ({url, likes, comments}) => {
+  pictures.forEach( ({url, likes, comments}) => {
     //Клонируем шаблон
     const pictureElement = pictuteTemplate.cloneNode(true);
     //Заполнение клона данными
@@ -21,8 +20,7 @@ const renderThumbnail = (picturesList) => {
   });
 
   //Отрисовка на странице
-  pictures.appendChild(picturesFragment);
-  //console.log(picturesList);
+  picturesContainer.appendChild(picturesFragment);
 };
 
 export {renderThumbnail};
