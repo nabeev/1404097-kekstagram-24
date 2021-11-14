@@ -52,6 +52,8 @@ function closeUploadForm () {
   scaleControlValue.value = '100%';
   imgPreview.classList = '';
   imgPreview.style.filter = '';
+  imgPreview.src = '';
+  uploadForm.querySelectorAll('.effects__preview').forEach((effectPreview) => effectPreview.style.backgroundImage = '');
 
   imgUploadForm.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
@@ -75,6 +77,7 @@ uploadImg.addEventListener('change', () => {
 
   if (matches) {
     imgPreview.src = URL.createObjectURL(file);
+    uploadForm.querySelectorAll('.effects__preview').forEach((effectPreview) => effectPreview.style.backgroundImage = `url("${imgPreview.src}")`);
   }
   //показываем форму
   imgUploadForm.classList.remove('hidden');

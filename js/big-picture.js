@@ -41,6 +41,10 @@ const makeComments = (comments, isFirst) => {
   bigPicture.querySelector('.social__comment-count').firstChild.data = `${bigPictureComments.childElementCount} из `;
 };
 
+const isAllCommenstLoad = (comments) => {
+  const bigPictureComments = bigPicture.querySelector('.social__comments');
+  return bigPictureComments.childElementCount === comments.length;
+};
 
 const makeBigPicture = (currentPicture) => {
 
@@ -56,4 +60,4 @@ const makeBigPicture = (currentPicture) => {
   bigPicture.querySelector('.social__caption').textContent = currentPicture.description;
 };
 
-export {makeBigPicture, makeComments};
+export {makeBigPicture, makeComments, isAllCommenstLoad};

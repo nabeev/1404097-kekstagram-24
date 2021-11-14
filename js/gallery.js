@@ -1,7 +1,7 @@
 //Модуль обработки событий кликов на миниатюры
 
 import {isEscapeKey} from './util.js';
-import {makeBigPicture, makeComments} from './big-picture.js';
+import {makeBigPicture, makeComments, isAllCommenstLoad} from './big-picture.js';
 import {renderThumbnail} from './thumbnail.js';
 
 const renderGallery = (pictures) => {
@@ -35,9 +35,23 @@ const renderGallery = (pictures) => {
       showBigPicture(pictures[i]);
 
       //Функция загрузки комментариев
-      const loadMoreComments = () => makeComments(pictures[i].comments, false);
+      const loadMoreComments = () => {
+        makeComments(pictures[i].comments, false);
+        if (isAllCommenstLoad(pictures[i].comments)) {
+          bigPictureCommentsLoader.classList.add('hidden');
+        } else {
+          bigPictureCommentsLoader.classList.remove('hidden');
+        }
+      };
       //Обработчик кнопки загрузки изображений
       bigPictureCommentsLoader.addEventListener('click', loadMoreComments);
+
+      if (isAllCommenstLoad(pictures[i].comments)) {
+        bigPictureCommentsLoader.classList.add('hidden');
+      } else {
+        bigPictureCommentsLoader.classList.remove('hidden');
+      }
+
       //Обработчик клавиши Esc
       const onBigBictureEscKeydown = (evt) => {
         if (isEscapeKey(evt)) {
