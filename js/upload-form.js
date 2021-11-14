@@ -4,6 +4,7 @@ import {makeCommentValidMessage, makeHashtagValidMessage} from './form-validatio
 import {increaseScale, decreaseScale} from './preview-scale.js';
 import {makeImageEffect} from './effects.js';
 import {sendData} from './api.js';
+import {FILE_TYPES} from './const.js';
 
 //Находим форму
 const uploadForm = document.querySelector('.img-upload__form');
@@ -51,6 +52,8 @@ function closeUploadForm () {
   scaleControlValue.value = '100%';
   imgPreview.classList = '';
   imgPreview.style.filter = '';
+  imgPreview.src = '';
+  uploadForm.querySelectorAll('.effects__preview').forEach((effectPreview) => effectPreview.style.backgroundImage = '');
 
   imgUploadForm.classList.add('hidden');
   document.querySelector('body').classList.remove('modal-open');
@@ -67,6 +70,15 @@ function closeUploadForm () {
 
 //Показ окна редактирования нового изображения по добавлению изображния
 uploadImg.addEventListener('change', () => {
+  //Показываем свою миниатюру
+  const file = uploadImg.files[0];
+  const fileName = file.name.toLowerCase();
+  const matches = FILE_TYPES.some((it) => fileName.endsWith(it));
+
+  if (matches) {
+    imgPreview.src = URL.createObjectURL(file);
+    uploadForm.querySelectorAll('.effects__preview').forEach((effectPreview) => effectPreview.style.backgroundImage = `url("${imgPreview.src}")`);
+  }
   //показываем форму
   imgUploadForm.classList.remove('hidden');
   document.querySelector('body').classList.add('modal-open');

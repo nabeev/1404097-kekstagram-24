@@ -1,3 +1,4 @@
+//Модуль работы с сообщениями об отправки формы
 import {isEscapeKey} from './util.js';
 
 const createSuccessUploadMessage = () => {

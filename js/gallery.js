@@ -1,14 +1,18 @@
 //Модуль обработки событий кликов на миниатюры
 
 import {isEscapeKey} from './util.js';
-import {makeBigPicture, makeComments} from './big-picture.js';
+import {makeBigPicture, makeComments, isAllCommenstLoad} from './big-picture.js';
 import {renderThumbnail} from './thumbnail.js';
 
-const renderBigPicture = (picturesList) => {
+const renderGallery = (pictures) => {
+  //Показываем фильтр
+  document.querySelector('.img-filters').classList.remove('img-filters--inactive');
+  //Удаляем вначале все миниатюры что есть на странице
+  document.querySelectorAll('.picture').forEach((picture) => picture.remove());
   //Отрисовка миниатюр
-  renderThumbnail(picturesList);
-  //Ищем миниатюры
-  const pictures = document.querySelectorAll('.picture');
+  renderThumbnail(pictures);
+  //Ищем миниатюры//
+  const thumbnails = document.querySelectorAll('.picture');
   //Ищем большое изображение
   const bigPicture = document.querySelector('.big-picture');
   //Ищем кнопку закрытия большого изображения
@@ -25,15 +29,29 @@ const renderBigPicture = (picturesList) => {
   };
 
   //Добавляем на наждый елемент обработчик открытия по клику
-  for (let i = 0; i < pictures.length; i++) {
-    pictures[i].addEventListener('click', () => {
+  for (let i = 0; i < thumbnails.length; i++) {
+    thumbnails[i].addEventListener('click', () => {
       //Отрисовка и показ страницы
-      showBigPicture(picturesList[i]);
+      showBigPicture(pictures[i]);
 
       //Функция загрузки комментариев
-      const loadMoreComments = () => makeComments(picturesList[i].comments, false);
+      const loadMoreComments = () => {
+        makeComments(pictures[i].comments, false);
+        if (isAllCommenstLoad(pictures[i].comments)) {
+          bigPictureCommentsLoader.classList.add('hidden');
+        } else {
+          bigPictureCommentsLoader.classList.remove('hidden');
+        }
+      };
       //Обработчик кнопки загрузки изображений
       bigPictureCommentsLoader.addEventListener('click', loadMoreComments);
+
+      if (isAllCommenstLoad(pictures[i].comments)) {
+        bigPictureCommentsLoader.classList.add('hidden');
+      } else {
+        bigPictureCommentsLoader.classList.remove('hidden');
+      }
+
       //Обработчик клавиши Esc
       const onBigBictureEscKeydown = (evt) => {
         if (isEscapeKey(evt)) {
@@ -57,4 +75,4 @@ const renderBigPicture = (picturesList) => {
 
 };
 
-export {renderBigPicture};
+export {renderGallery};
